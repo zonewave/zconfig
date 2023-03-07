@@ -16,7 +16,6 @@ type Suite struct {
 	ctrl      *gomock.Controller
 	mockFs    *aferomock.MockFs
 	mockAfero *aferomock.MockAfero
-	jsonFile  string
 }
 
 // Make sure that VariableThatShouldStartAtFive is set to five

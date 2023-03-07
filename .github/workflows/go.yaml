@@ -1,0 +1,39 @@
+name: go
+run-name: ${{ github.actor }} start  jobs
+on:
+  push:
+    branches: ['*']
+    tags: ['v*']
+  pull_request:
+    branches: ['*']
+
+jobs:
+  lint:
+    name: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: './go.mod'
+          check-latest: true
+          cache: true
+          cache-dependency-path: './go.sum'
+      - name: Load cached go bin
+        id: cache-go-bin
+        uses: actions/cache@v3
+        with:
+          path: ~/go/bin
+          key: ${{ runner.os }}-go-bin
+      - name: Install go bin
+        if: ${{ steps.cache-go-bin.outputs.cache-hit != 'true' }}
+        run: make install
+      - name: Lint Go Code
+        run: make lint
+      - run: make test
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+      - run: make clean

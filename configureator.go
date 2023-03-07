@@ -53,6 +53,8 @@ func defaultUnmarshalFunc() map[string]func([]byte, interface{}) error {
 		"csv":  gocsv.UnmarshalBytes,
 	}
 }
+
+// Reset reset config manager
 func (c *Configurator) Reset() *Configurator {
 	c.container = nil
 	c.configPaths = _defaultLookupPaths
@@ -123,13 +125,13 @@ func (c *Configurator) set(configFile string, cfgStructPtr interface{}) error {
 	return nil
 }
 
-// searchFile
+// searchFile search file in configPaths
 func (c *Configurator) searchFile(file string) (string, error) {
-	if f, err := fileutil.SearchInPaths(c.fs, c.configPaths, file); err != nil {
+	f, err := fileutil.SearchInPaths(c.fs, c.configPaths, file)
+	if err != nil {
 		return "", errors.WithStack(NewErrFileNotFound(file, fmt.Sprintf("%s", c.configPaths), err))
-	} else {
-		return f, nil
 	}
+	return f, nil
 }
 
 func (c *Configurator) loadConfig() error {
