@@ -1,4 +1,4 @@
-GO_FILES=`go list ./... | grep -v -E "mock|store|test|fake|cmd"`
+GO_FILES=`go list ./... | grep -v -E "mock|test|fake|cmd"`
 
 #GOBIN = $(shell go env GOPATH)/bin
 GOLINT =golint
