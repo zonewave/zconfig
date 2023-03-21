@@ -35,18 +35,23 @@ type Configurator struct {
 }
 
 // New return config manager
-func New() *Configurator {
-	return new(Configurator).Reset()
+func New(opts ...Option) *Configurator {
+	c := &Configurator{
+		configPaths:  _defaultLookupPaths,
+		fs:           &afero.Afero{Fs: afero.NewOsFs()},
+		unmarshalMgr: serialization.NewSerialization(nil),
+	}
+	for _, opt := range opts {
+		opt.applyProvideOption(c)
+	}
+	return c
 }
 
 // Reset reset config manager
 func (c *Configurator) Reset() *Configurator {
 	c.container = nil
-	c.configPaths = _defaultLookupPaths
-	c.mainFileType = "json"
+	c.mainFileType = ""
 	c.mainFile = ""
-	c.fs = &afero.Afero{Fs: afero.NewOsFs()}
-	c.unmarshalMgr = serialization.NewSerialization(nil)
 	return c
 }
 
