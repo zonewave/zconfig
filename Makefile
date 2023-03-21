@@ -19,8 +19,12 @@ golangci-lint:
 
 .PHONY: test
 test:
-	go test -race -coverprofile=cover.out -coverpkg=./... ./...
-	go tool cover -html=cover.out -o cover.html
+	@go test -race  -parallel=5 $(GO_FILES)
+
+.PHONY: cover
+cover:
+	@go test -race -parallel=5 -coverprofile=cover.out  $(GO_FILES)
+	@go tool cover -html=cover.out -o cover.html
 
 
 clean: ## Remove previous build
