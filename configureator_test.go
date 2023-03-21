@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/stretchr/testify/require"
 	"github.com/zonewave/pkgs/standutil/fileutil"
+	"github.com/zonewave/zconfig/test"
 	"testing"
 )
 
@@ -82,55 +83,7 @@ func (s *Suite) TestConfigurator_set() {
 }
 
 func TestConfigurator_unmarshal(t *testing.T) {
-	t.Run("err", func(t *testing.T) {
 
-		tests := []struct {
-			name     string
-			bs       []byte
-			fileType string
-			cfg      interface{}
-			err      error
-		}{
-			// TODO: Add test cases.
-			{
-				name:     "no unmarshal",
-				bs:       []byte(jsonExample),
-				fileType: "test",
-				cfg:      nil,
-				err:      NewErrUnsupportedUnmarshal("test"),
-			},
-			{
-				name:     "unmarshal error",
-				bs:       []byte("{"),
-				fileType: "yaml",
-				cfg:      nil,
-				err:      errors.New("unmarshal bs:{, yaml:*zconfig.AppConfig failed:yaml: line 1: did not find expected node content"),
-			},
-		}
-		c := New()
-		var err error
-		for _, tt := range tests {
-			t.Run(tt.name, func(t *testing.T) {
-				c.Reset()
-				cfg := &AppConfig{}
-				err = c.unmarshal(tt.fileType, tt.bs, cfg)
-				require.EqualError(t, err, tt.err.Error())
-
-			})
-		}
-	})
-	t.Run("ok", func(t *testing.T) {
-
-		c := New()
-		var err error
-
-		cfg := &AppConfig{}
-		c.mainFileType = "json"
-		err = c.unmarshal("json", []byte(jsonExample), cfg)
-		require.NoError(t, err)
-		require.Equal(t, "test-app", cfg.AppName)
-
-	})
 }
 
 func (s *Suite) TestConfigurator_loadConfig() {
@@ -177,8 +130,8 @@ func (s *Suite) TestConfigurator_loadConfig() {
 		c := New()
 		c.mainFile = "load_config_ok.json"
 		c.fs = s.mockAfero
-		s.mockAfero.EXPECT().ReadFile(c.mainFile).Return([]byte(jsonExample), nil).Times(1)
-		c.container = &AppConfig{}
+		s.mockAfero.EXPECT().ReadFile(c.mainFile).Return([]byte(test.JsonExample), nil).Times(1)
+		c.container = &test.AppConfig{}
 		err := c.loadConfig()
 		s.Require().NoError(err)
 
@@ -207,7 +160,7 @@ func (s *Suite) TestConfigurator_Initialize() {
 				name:     "load config err",
 				fileName: "load_config_err.json",
 				err:      errors.New("load config failed"),
-				cfg:      &AppConfig{},
+				cfg:      &test.AppConfig{},
 				fn: func(c *Configurator) {
 					c.fs = s.mockAfero
 					s.mockAfero.EXPECT().Exists("load_config_err.json").Return(true, nil).Times(1)
@@ -243,8 +196,8 @@ func (s *Suite) TestConfigurator_Initialize() {
 		file := "Initialize_ok.json"
 		c.fs = s.mockAfero
 		s.mockAfero.EXPECT().Exists("Initialize_ok.json").Return(true, nil).Times(1)
-		s.mockAfero.EXPECT().ReadFile(file).Return([]byte(jsonExample), nil).Times(1)
-		cfg := &AppConfig{}
+		s.mockAfero.EXPECT().ReadFile(file).Return([]byte(test.JsonExample), nil).Times(1)
+		cfg := &test.AppConfig{}
 		err := c.Initialize(file, cfg)
 		s.Require().NoError(err)
 		s.Require().Equal("test-app", cfg.AppName)

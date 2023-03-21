@@ -1,17 +1,14 @@
 package zconfig
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"github.com/cockroachdb/errors"
-	"github.com/gocarina/gocsv"
 	"github.com/spf13/afero"
 	"github.com/zonewave/pkgs/standutil/cputil"
 	"github.com/zonewave/pkgs/standutil/fileutil"
 	"github.com/zonewave/pkgs/standutil/reflectutil"
 	"github.com/zonewave/pkgs/standutil/sliceutil"
-	"gopkg.in/yaml.v3"
+	"github.com/zonewave/zconfig/serialization"
 	"strings"
 )
 
@@ -36,22 +33,12 @@ type Configurator struct {
 	// The filesystem to read config from.
 	fs fileutil.Afero
 
-	unmarshalMgr map[string]func([]byte, interface{}) error
+	unmarshalMgr *serialization.Serialization
 }
 
 // New return config manager
 func New() *Configurator {
 	return new(Configurator).Reset()
-}
-
-func defaultUnmarshalFunc() map[string]func([]byte, interface{}) error {
-	return map[string]func([]byte, interface{}) error{
-		"json": json.Unmarshal,
-		"yml":  yaml.Unmarshal,
-		"yaml": yaml.Unmarshal,
-		"toml": toml.Unmarshal,
-		"csv":  gocsv.UnmarshalBytes,
-	}
 }
 
 // Reset reset config manager
@@ -62,7 +49,7 @@ func (c *Configurator) Reset() *Configurator {
 	c.mainFileType = "json"
 	c.mainFile = ""
 	c.fs = &afero.Afero{Fs: afero.NewOsFs()}
-	c.unmarshalMgr = defaultUnmarshalFunc()
+	c.unmarshalMgr = serialization.NewSerialization(nil)
 	return c
 }
 
@@ -140,21 +127,9 @@ func (c *Configurator) loadConfig() error {
 		return err
 	}
 
-	err = c.unmarshal(c.mainFileType, file, c.container)
+	err = c.unmarshalMgr.Unmarshal(c.mainFileType, file, c.container)
 	if err != nil {
 		return err
-	}
-
-	return nil
-}
-
-func (c *Configurator) unmarshal(fileType string, bs []byte, cfg interface{}) error {
-	unmarshal, ok := c.unmarshalMgr[fileType]
-	if !ok {
-		return errors.WithStack(NewErrUnsupportedUnmarshal(fileType))
-	}
-	if err := unmarshal(bs, cfg); err != nil {
-		return errors.WithStack(NewErrUnmarshal(err, bs, fileType, cfg))
 	}
 
 	return nil

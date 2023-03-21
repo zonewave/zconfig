@@ -29,11 +29,6 @@ func TestErrorString(t *testing.T) {
 			err:  NewErrInvalidCfgExt("test"),
 			want: "Unsupported Config file ext \"test\"",
 		},
-		{
-			name: "unsupported unmarshal",
-			err:  NewErrUnsupportedUnmarshal("test"),
-			want: "Unsupported Unmarshal \"test\"",
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
