@@ -56,3 +56,13 @@ func TestSerialization_Unmarshal(t *testing.T) {
 
 	})
 }
+
+func TestSerialization_IsSupportType(t *testing.T) {
+	c := NewDefaultSerialization()
+	require.True(t, c.IsSupportType("json"))
+	require.True(t, c.IsSupportType("yaml"))
+	require.True(t, c.IsSupportType("yml"))
+	require.True(t, c.IsSupportType("toml"))
+	require.True(t, c.IsSupportType("csv"))
+	require.False(t, c.IsSupportType("test"))
+}
