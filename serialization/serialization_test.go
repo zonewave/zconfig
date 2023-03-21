@@ -21,7 +21,7 @@ func TestSerialization_Unmarshal(t *testing.T) {
 			// TODO: Add test cases.
 			{
 				name:     "no unmarshal",
-				bs:       []byte(test.JsonExample),
+				bs:       []byte(test.JSONExample),
 				fileType: "test",
 				cfg:      nil,
 				err:      NewErrUnsupportedUnmarshal("test"),
@@ -50,7 +50,7 @@ func TestSerialization_Unmarshal(t *testing.T) {
 			"json": jsoniter.Unmarshal,
 		})
 		cfg := &test.AppConfig{}
-		err := c.Unmarshal("json", []byte(test.JsonExample), cfg)
+		err := c.Unmarshal("json", []byte(test.JSONExample), cfg)
 		require.NoError(t, err)
 		require.Equal(t, "test-app", cfg.AppName)
 

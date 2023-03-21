@@ -8,15 +8,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// UnmarshallFunc is a function that unmarshals a byte slice into a value.
 type UnmarshallFunc func([]byte, interface{}) error
 
+// Serialization is a serialization manager
 type Serialization struct {
-	Unmarshalls map[string]UnmarshallFunc
+	unmarshalls map[string]UnmarshallFunc
 }
 
+// NewDefaultSerialization returns a default serialization manager
 func NewDefaultSerialization() *Serialization {
 	return &Serialization{
-		Unmarshalls: map[string]UnmarshallFunc{
+		unmarshalls: map[string]UnmarshallFunc{
 			"json": json.Unmarshal,
 			"yaml": yaml.Unmarshal,
 			"yml":  yaml.Unmarshal,
@@ -27,16 +30,18 @@ func NewDefaultSerialization() *Serialization {
 
 }
 
+// NewSerialization returns a serialization manager with custom unmarshalls
 func NewSerialization(fns map[string]UnmarshallFunc) *Serialization {
 	s := NewDefaultSerialization()
 	for k, v := range fns {
-		s.Unmarshalls[k] = v
+		s.unmarshalls[k] = v
 	}
 	return s
 }
 
+// Unmarshal  a byte slice into a value.
 func (s *Serialization) Unmarshal(fType string, data []byte, v interface{}) error {
-	unmarshall, ok := s.Unmarshalls[fType]
+	unmarshall, ok := s.unmarshalls[fType]
 	if !ok {
 		return errors.WithStack(NewErrUnsupportedUnmarshal(fType))
 	}
@@ -44,4 +49,10 @@ func (s *Serialization) Unmarshal(fType string, data []byte, v interface{}) erro
 		return errors.WithStack(NewErrUnmarshal(err, data, fType, v))
 	}
 	return nil
+}
+
+// IsSupportType returns true if the serialization manager supports the file type
+func (s *Serialization) IsSupportType(fType string) bool {
+	_, ok := s.unmarshalls[fType]
+	return ok
 }
