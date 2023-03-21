@@ -8,16 +8,6 @@ import (
 	"testing"
 )
 
-func TestConfigurator_checkExt(t *testing.T) {
-	c := New()
-	err := c.checkExt("json")
-	require.NoError(t, err)
-
-	err = c.checkExt("test")
-	require.ErrorIs(t, err, ErrInvalidCfgExt("test"))
-
-}
-
 func TestConfigurator_checkObject(t *testing.T) {
 	c := New()
 	err := c.checkObject(&struct {
@@ -130,7 +120,7 @@ func (s *Suite) TestConfigurator_loadConfig() {
 		c := New()
 		c.mainFile = "load_config_ok.json"
 		c.fs = s.mockAfero
-		s.mockAfero.EXPECT().ReadFile(c.mainFile).Return([]byte(test.JsonExample), nil).Times(1)
+		s.mockAfero.EXPECT().ReadFile(c.mainFile).Return([]byte(test.JSONExample), nil).Times(1)
 		c.container = &test.AppConfig{}
 		err := c.loadConfig()
 		s.Require().NoError(err)
@@ -196,7 +186,7 @@ func (s *Suite) TestConfigurator_Initialize() {
 		file := "Initialize_ok.json"
 		c.fs = s.mockAfero
 		s.mockAfero.EXPECT().Exists("Initialize_ok.json").Return(true, nil).Times(1)
-		s.mockAfero.EXPECT().ReadFile(file).Return([]byte(test.JsonExample), nil).Times(1)
+		s.mockAfero.EXPECT().ReadFile(file).Return([]byte(test.JSONExample), nil).Times(1)
 		cfg := &test.AppConfig{}
 		err := c.Initialize(file, cfg)
 		s.Require().NoError(err)

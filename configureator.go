@@ -7,7 +7,6 @@ import (
 	"github.com/zonewave/pkgs/standutil/cputil"
 	"github.com/zonewave/pkgs/standutil/fileutil"
 	"github.com/zonewave/pkgs/standutil/reflectutil"
-	"github.com/zonewave/pkgs/standutil/sliceutil"
 	"github.com/zonewave/zconfig/serialization"
 	"strings"
 )
@@ -20,13 +19,12 @@ var _defaultLookupPaths = []string{
 }
 
 // _defaultSupportedExts are universally supported extensions.
-var _defaultSupportedExts = []string{"json", "yml", "yaml", "toml"}
 
 // Configurator config manager
 type Configurator struct {
-	container    interface{}
-	configPaths  []string
-	supportExts  []string
+	container   interface{}
+	configPaths []string
+
 	mainFileType string
 	mainFile     string
 
@@ -45,7 +43,6 @@ func New() *Configurator {
 func (c *Configurator) Reset() *Configurator {
 	c.container = nil
 	c.configPaths = _defaultLookupPaths
-	c.supportExts = _defaultSupportedExts
 	c.mainFileType = "json"
 	c.mainFile = ""
 	c.fs = &afero.Afero{Fs: afero.NewOsFs()}
@@ -70,13 +67,6 @@ func (c *Configurator) Initialize(configFile string, cfgStructPtr interface{}) e
 	return nil
 }
 
-func (c *Configurator) checkExt(ext string) error {
-	if !sliceutil.Contain(ext, c.supportExts) {
-		return errors.WithStack(NewErrInvalidCfgExt(ext))
-	}
-	return nil
-}
-
 func (c *Configurator) checkObject(obj interface{}) error {
 	if reflectutil.IsStructPtr(obj) {
 		return nil
@@ -93,8 +83,8 @@ func (c *Configurator) set(configFile string, cfgStructPtr interface{}) error {
 	)
 	// check type
 	configType = fileutil.FileExtNoDot(configFile)
-	if err = c.checkExt(configType); err != nil {
-		return errors.WithStack(err)
+	if !c.unmarshalMgr.IsSupportType(configType) {
+		return errors.WithStack(NewErrInvalidCfgExt(configType))
 	}
 	// check object
 	if err = c.checkObject(cfgStructPtr); err != nil {
