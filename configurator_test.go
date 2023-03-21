@@ -120,6 +120,7 @@ func (s *Suite) TestConfigurator_loadConfig() {
 		c := New()
 		c.mainFile = "load_config_ok.json"
 		c.fs = s.mockAfero
+		c.mainFileType = "json"
 		s.mockAfero.EXPECT().ReadFile(c.mainFile).Return([]byte(test.JSONExample), nil).Times(1)
 		c.container = &test.AppConfig{}
 		err := c.loadConfig()
