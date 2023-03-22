@@ -15,19 +15,19 @@ func TestErrorString(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "file not found",
-			err:  NewErrFileNotFound("test", "", fileutil.ErrNotFound),
+			name: "File not found",
+			err:  newErrFileNotFound("test", "", fileutil.ErrNotFound),
 			want: "test",
 		},
 		{
 			name: "unsupported config type",
-			err:  NewErrUnsupportedCfgType("test"),
+			err:  newErrUnsupportedCfgType("test"),
 			want: "Unsupported cfg type:string,should be pointer to struct",
 		},
 		{
 			name: "invalid config ext",
-			err:  NewErrInvalidCfgExt("test"),
-			want: "Unsupported Config file ext \"test\"",
+			err:  newErrInvalidCfgExt("test"),
+			want: "Unsupported Config File ext \"test\"",
 		},
 	}
 	for _, tt := range tests {

@@ -10,25 +10,25 @@ func (u ErrUnsupportedUnmarshal) Error() string {
 	return fmt.Sprintf("Unsupported Unmarshal %q", string(u))
 }
 
-// NewErrUnsupportedUnmarshal returns a new ErrUnsupportedUnmarshal
-func NewErrUnsupportedUnmarshal(str string) error {
+// newErrUnsupportedUnmarshal returns a new ErrUnsupportedUnmarshal
+func newErrUnsupportedUnmarshal(str string) error {
 	return ErrUnsupportedUnmarshal(str)
 }
 
 // ErrUnmarshal denotes failing to unmarshal configuration file.
 type ErrUnmarshal struct {
-	err   error
-	bs    []byte
-	fType string
-	fCtr  interface{}
+	Err   error
+	Bs    []byte
+	FType string
+	FCtr  interface{}
 }
 
-// NewErrUnmarshal returns a new ErrUnmarshal
-func NewErrUnmarshal(err error, bs []byte, fType string, fCtr interface{}) *ErrUnmarshal {
-	return &ErrUnmarshal{err: err, bs: bs, fType: fType, fCtr: fCtr}
+// newErrUnmarshal returns a new ErrUnmarshal
+func newErrUnmarshal(err error, bs []byte, fType string, fCtr interface{}) *ErrUnmarshal {
+	return &ErrUnmarshal{Err: err, Bs: bs, FType: fType, FCtr: fCtr}
 }
 
 // Error returns the formatted ErrUnmarshal.
 func (e *ErrUnmarshal) Error() string {
-	return fmt.Sprintf("unmarshal bs:%s, %s:%T failed:%s", string(e.bs), e.fType, e.fCtr, e.err.Error())
+	return fmt.Sprintf("unmarshal Bs:%s, %s:%T failed:%s", string(e.Bs), e.FType, e.FCtr, e.Err.Error())
 }

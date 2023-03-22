@@ -15,7 +15,7 @@ func TestConfigurator_checkObject(t *testing.T) {
 	require.NoError(t, err)
 
 	err = c.checkObject("test")
-	require.ErrorIs(t, err, NewErrUnsupportedCfgType("test"))
+	require.ErrorIs(t, err, newErrUnsupportedCfgType("test"))
 }
 
 func (s *Suite) TestConfigurator_set() {
@@ -37,10 +37,10 @@ func (s *Suite) TestConfigurator_set() {
 				name:     "object error",
 				fileName: "2.json",
 				cfg:      "test",
-				err:      NewErrUnsupportedCfgType("test"),
+				err:      newErrUnsupportedCfgType("test"),
 			},
 			{
-				name:     "file not found",
+				name:     "File not found",
 				fileName: "2.json",
 				cfg:      &struct{}{},
 				err:      fileutil.ErrNotFound,
@@ -86,7 +86,7 @@ func (s *Suite) TestConfigurator_loadConfig() {
 		}{
 			// TODO: Add test cases.
 			{
-				name: "file read failed",
+				name: "File read failed",
 				file: "load_config_err.json",
 				err:  fileutil.ErrNotFound,
 				fn: func(c *Configurator) {

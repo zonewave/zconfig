@@ -76,7 +76,7 @@ func (c *Configurator) checkObject(obj interface{}) error {
 	if reflectutil.IsStructPtr(obj) {
 		return nil
 	}
-	return errors.WithStack(NewErrUnsupportedCfgType(obj))
+	return errors.WithStack(newErrUnsupportedCfgType(obj))
 }
 
 func (c *Configurator) set(configFile string, cfgStructPtr interface{}) error {
@@ -89,14 +89,14 @@ func (c *Configurator) set(configFile string, cfgStructPtr interface{}) error {
 	// check type
 	configType = fileutil.FileExtNoDot(configFile)
 	if !c.unmarshalMgr.IsSupportType(configType) {
-		return errors.WithStack(NewErrInvalidCfgExt(configType))
+		return errors.WithStack(newErrInvalidCfgExt(configType))
 	}
 	// check object
 	if err = c.checkObject(cfgStructPtr); err != nil {
 		return errors.WithStack(err)
 	}
 
-	// check file
+	// check File
 	if mainFile, err = c.searchFile(configFile); err != nil {
 		return errors.WithStack(err)
 	}
@@ -107,11 +107,11 @@ func (c *Configurator) set(configFile string, cfgStructPtr interface{}) error {
 	return nil
 }
 
-// searchFile search file in configPaths
+// searchFile search File in configPaths
 func (c *Configurator) searchFile(file string) (string, error) {
 	f, err := fileutil.SearchInPaths(c.fs, c.configPaths, file)
 	if err != nil {
-		return "", errors.WithStack(NewErrFileNotFound(file, fmt.Sprintf("%s", c.configPaths), err))
+		return "", errors.WithStack(newErrFileNotFound(file, fmt.Sprintf("%s", c.configPaths), err))
 	}
 	return f, nil
 }
