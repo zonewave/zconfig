@@ -43,10 +43,10 @@ func NewSerialization(fns map[string]UnmarshallFunc) *Serialization {
 func (s *Serialization) Unmarshal(fType string, data []byte, v interface{}) error {
 	unmarshall, ok := s.unmarshalls[fType]
 	if !ok {
-		return errors.WithStack(NewErrUnsupportedUnmarshal(fType))
+		return errors.WithStack(newErrUnsupportedUnmarshal(fType))
 	}
 	if err := unmarshall(data, v); err != nil {
-		return errors.WithStack(NewErrUnmarshal(err, data, fType, v))
+		return errors.WithStack(newErrUnmarshal(err, data, fType, v))
 	}
 	return nil
 }

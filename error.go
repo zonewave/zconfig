@@ -4,43 +4,43 @@ import (
 	"fmt"
 )
 
-// ErrFileNotFound denotes failing to find configuration file.
+// ErrFileNotFound denotes failing to find configuration File.
 type ErrFileNotFound struct {
-	file, location string
+	File, Location string
 
-	err error
+	Err error
 }
 
 // Error returns the formatted configuration error.
 func (e ErrFileNotFound) Error() string {
-	return fmt.Sprintf("%s,file:%q,location:%q", e.err.Error(), e.file, e.location)
+	return fmt.Sprintf("%s,File:%q,Location:%q", e.Err.Error(), e.File, e.Location)
 }
 
 // Unwrap returns the underlying error.
 func (e ErrFileNotFound) Unwrap() error {
-	return e.err
+	return e.Err
 }
 
-// NewErrFileNotFound returns a new ErrFileNotFound
-func NewErrFileNotFound(file, location string, err error) error {
-	return ErrFileNotFound{file: file, location: location, err: err}
+// newErrFileNotFound returns a new ErrFileNotFound
+func newErrFileNotFound(file, location string, err error) error {
+	return ErrFileNotFound{File: file, Location: location, Err: err}
 }
 
 // ErrUnsupportedCfgType denotes encountering an unsupported
-// configuration file type.
+// configuration File type.
 type ErrUnsupportedCfgType struct {
-	obj interface{}
+	Obj interface{}
 }
 
 // Error returns the formatted configuration error.
 func (e ErrUnsupportedCfgType) Error() string {
-	return fmt.Sprintf("Unsupported cfg type:%T,should be pointer to struct", e.obj)
+	return fmt.Sprintf("Unsupported cfg type:%T,should be pointer to struct", e.Obj)
 }
 
-// NewErrUnsupportedCfgType returns a new ErrUnsupportedCfgType
-func NewErrUnsupportedCfgType(obj interface{}) error {
+// newErrUnsupportedCfgType returns a new ErrUnsupportedCfgType
+func newErrUnsupportedCfgType(obj interface{}) error {
 	return ErrUnsupportedCfgType{
-		obj: obj,
+		Obj: obj,
 	}
 }
 
@@ -50,10 +50,10 @@ type ErrInvalidCfgExt string
 
 // Error returns the formatted configuration error.
 func (str ErrInvalidCfgExt) Error() string {
-	return fmt.Sprintf("Unsupported Config file ext %q", string(str))
+	return fmt.Sprintf("Unsupported Config File ext %q", string(str))
 }
 
-// NewErrInvalidCfgExt returns a new ErrInvalidCfgExt error of not supported config file type
-func NewErrInvalidCfgExt(str string) error {
+// newErrInvalidCfgExt returns a new ErrInvalidCfgExt error of not supported config File type
+func newErrInvalidCfgExt(str string) error {
 	return ErrInvalidCfgExt(str)
 }

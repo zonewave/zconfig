@@ -7,24 +7,26 @@ type Option interface {
 	applyProvideOption(cfg *Configurator)
 }
 
+// WithCfgFilePath set config File path
 func WithCfgFilePath(path []string) Option {
-	return CfgFilePathOption(path)
+	return cfgFilePathOption(path)
 }
 
-type CfgFilePathOption []string
+type cfgFilePathOption []string
 
-func (p CfgFilePathOption) applyProvideOption(opt *Configurator) {
+func (p cfgFilePathOption) applyProvideOption(opt *Configurator) {
 	opt.configPaths = p
 }
 
-type SerializerOption struct {
+type serializerOption struct {
 	s *serialization.Serialization
 }
 
+// WithSerializerOption set serializer
 func WithSerializerOption(s *serialization.Serialization) Option {
-	return &SerializerOption{s: s}
+	return &serializerOption{s: s}
 }
 
-func (s SerializerOption) applyProvideOption(cfg *Configurator) {
+func (s serializerOption) applyProvideOption(cfg *Configurator) {
 	cfg.unmarshalMgr = s.s
 }

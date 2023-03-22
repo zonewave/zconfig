@@ -9,7 +9,7 @@ import (
 )
 
 func TestSerialization_Unmarshal(t *testing.T) {
-	t.Run("err", func(t *testing.T) {
+	t.Run("Err", func(t *testing.T) {
 
 		tests := []struct {
 			name     string
@@ -24,14 +24,14 @@ func TestSerialization_Unmarshal(t *testing.T) {
 				bs:       []byte(test.JSONExample),
 				fileType: "test",
 				cfg:      nil,
-				err:      NewErrUnsupportedUnmarshal("test"),
+				err:      newErrUnsupportedUnmarshal("test"),
 			},
 			{
 				name:     "unmarshal error",
 				bs:       []byte("{"),
 				fileType: "yaml",
 				cfg:      &test.AppConfig{},
-				err:      errors.New("unmarshal bs:{, yaml:*test.AppConfig failed:yaml: line 1: did not find expected node content"),
+				err:      errors.New("unmarshal Bs:{, yaml:*test.AppConfig failed:yaml: line 1: did not find expected node content"),
 			},
 		}
 		c := NewDefaultSerialization()
