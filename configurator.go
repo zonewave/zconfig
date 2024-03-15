@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/cockroachdb/errors"
 	"github.com/spf13/afero"
-	"github.com/zonewave/pkgs/standutil/cputil"
-	"github.com/zonewave/pkgs/standutil/fileutil"
-	"github.com/zonewave/pkgs/standutil/reflectutil"
+	"github.com/zonewave/pkgs/cputil"
+	"github.com/zonewave/pkgs/fileutil"
+	"github.com/zonewave/pkgs/reflectutil"
 	"github.com/zonewave/zconfig/serialization"
 	"strings"
 )

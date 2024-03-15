@@ -2,7 +2,7 @@ package zconfig
 
 import (
 	"github.com/golang/mock/gomock"
-	"github.com/zonewave/pkgs/mock/aferomock"
+	"github.com/zonewave/pkgs/mocks/aferomock"
 	"testing"
 
 	"github.com/stretchr/testify/suite"

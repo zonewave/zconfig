@@ -2,7 +2,7 @@ package zconfig
 
 import (
 	"github.com/stretchr/testify/require"
-	"github.com/zonewave/pkgs/standutil/fileutil"
+	"github.com/zonewave/pkgs/fileutil"
 	"testing"
 )
 

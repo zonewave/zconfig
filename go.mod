@@ -10,7 +10,7 @@ require (
 	github.com/json-iterator/go v1.1.9
 	github.com/spf13/afero v1.9.4
 	github.com/stretchr/testify v1.8.1
-	github.com/zonewave/pkgs v1.0.0
+	github.com/zonewave/pkgs v1.0.1-0.20231101063928-8adea88ce2b3
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -28,7 +28,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
-	golang.org/x/exp v0.0.0-20230213192124-5e25df0256eb // indirect
 	golang.org/x/sys v0.6.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 )
